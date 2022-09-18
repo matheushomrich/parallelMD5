@@ -1,0 +1,10 @@
+{
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "c:\\Users\\Josu\\Documents\\PUCRS\\CP\\parallelMD5",
+			"binaryPath": "c:\\Users\\Josu\\Documents\\PUCRS\\CP\\parallelMD5\\md5",
+			"binaryArgs": []
+		}
+	],
+	"C_Cpp.errorSquiggles": "Disabled"
+}
