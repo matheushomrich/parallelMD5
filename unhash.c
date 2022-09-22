@@ -17,14 +17,13 @@ int generateRandomNum() {
 
 void generatePassWord(int size, int difficulty, char letters[], char result[]){
     if (difficulty == EASY) {
-        for (size_t i = 0; i < size - 1; i++)
+        for (size_t i = 0; i < size; i++)
         {
             int randomNumber = generateRandomNum();
-            printf("Numero gerado:%d letra -> %c ",randomNumber, letters[randomNumber]);
+            // printf("Numero gerado:%d letra -> %c ",randomNumber, letters[randomNumber]);
             result[i] = letters[randomNumber];
-            if(i == size - 2){
-                result[i+1] = '\0';
-                printf("\n");
+            if(i == size - 1){
+                result[i+1] = 0;
             }
         }
     } else if (difficulty == MEDIUM) {
@@ -32,7 +31,6 @@ void generatePassWord(int size, int difficulty, char letters[], char result[]){
     } else if (difficulty == HARD) {
         // printf("HARD");
     }
-    printf("RESULT: %s\n",result);
 }
 
 
@@ -46,27 +44,26 @@ int main(int argc, char *argv[]){
     int dificuldade = atoi(argv[2]);
     char* senha = argv[1];
     int tamanhoSenha = strlen(senha);
-    
 	result = md5String(senha);   
+
+    int count = 0;
 
     char generatedPassWord[tamanhoSenha + 1];
     generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
  	hash = md5String(generatedPassWord);
-
-    while (*result != *hash) {
+    while (!compare(hash, result)) {
         printf("Tamanho da senha:%d\n",tamanhoSenha);
         generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
-        printf("Procurando a senha(Senha antes do hash): %s \n",generatedPassWord);
+        printf("Gerador de senha(Senha antes do hash): %s \n",generatedPassWord);
         hash = md5String(generatedPassWord);
-        printf("Procurando a senha(Depois do hash): ");
-        print_hash(hash);
-        printf("Tem que ser igual a: ");
-        print_hash(result);
+        printf("Gerador de senha(Depois do hash): ");
+        print_bytes(hash,16);  
+        printf("Hash sendo procurado: ");
+        print_bytes(result,16);  
         printf("\n");
+        count ++;
     }
-   
-    
+
     printf("A senha e: %s", generatedPassWord);
     free(result);
- 
 }

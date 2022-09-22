@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "md5.h"
 
 void print_bytes(void *p, size_t length){
@@ -16,8 +17,19 @@ void print_bytes(void *p, size_t length){
 
 void print_hash(uint8_t *p){
 	for(unsigned int i = 0; i < 16; ++i){
-		printf("%02x", p[i]);
+		printf("%x", p[i]);
 	}
 	printf("\n");
+}
+
+bool compare(uint8_t *hash1, uint8_t *hash2){
+	bool isEqual = true;
+	for(unsigned int i = 0; i < 16; ++i){
+		if(hash1[i] != hash2[i]){
+			isEqual = false;
+			break;
+		}
+	}
+	return isEqual;
 }
 
