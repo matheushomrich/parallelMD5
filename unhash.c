@@ -64,6 +64,8 @@ int main(int argc, char *argv[]){
         count ++;
     }
 
-    printf("A senha e: %s", generatedPassWord);
+    printf("Senha encontrada: %s\n", generatedPassWord);
+    printf("Quantidade de iteracoes: %d", count);
+
     free(result);
 }
