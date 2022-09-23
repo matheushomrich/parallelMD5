@@ -47,23 +47,29 @@ int main(int argc, char *argv[]){
 	result = md5String(senha);   
 
     int count = 0;
+    clock_t t;
+    t = clock();
 
     char generatedPassWord[tamanhoSenha + 1];
     generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
  	hash = md5String(generatedPassWord);
     while (!compare(hash, result)) {
-        printf("Tamanho da senha:%d\n",tamanhoSenha);
+        //printf("Tamanho da senha: %d\n",tamanhoSenha);
         generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
-        printf("Gerador de senha(Senha antes do hash): %s \n",generatedPassWord);
+        //printf("Gerador de senha(Senha antes do hash): %s \n",generatedPassWord);
         hash = md5String(generatedPassWord);
-        printf("Gerador de senha(Depois do hash): ");
-        print_bytes(hash,16);  
-        printf("Hash sendo procurado: ");
-        print_bytes(result,16);  
-        printf("\n");
+        //printf("Gerador de senha(Depois do hash): ");
+        //print_bytes(hash,16);  
+        //printf("Hash sendo procurado: ");
+        //print_bytes(result,16);  
+        //printf("\n");
         count ++;
     }
 
+    t = clock() - t;
+    double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
+
+    printf("Tempo de execucao: %f  \n", time_taken);
     printf("Senha encontrada: %s\n", generatedPassWord);
     printf("Quantidade de iteracoes: %d", count);
 
