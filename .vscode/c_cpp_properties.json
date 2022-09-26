@@ -14,7 +14,7 @@
             "cStandard": "gnu17",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "windows-gcc-x86",
-            "compilerPath": "C:/MinGW/bin/gcc.exe"
+            "compilerPath": ""
         }
     ],
     "version": 4

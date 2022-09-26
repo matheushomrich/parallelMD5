@@ -12,18 +12,19 @@
 #define MEDIUM 1
 #define HARD 2
 
-int generateRandomNum(int seed)
+
+int generateRandomNum()
 {
     return rand() % 26;
 }
 
-void generatePassWord(int size, int difficulty, char letters[], char result[], int seed)
+void generatePassWord(int size, int difficulty, char letters[], char result[])
 {
     if (difficulty == EASY)
     {
         for (size_t i = 0; i < size; i++)
         {
-            int randomNumber = generateRandomNum(seed);
+            int randomNumber = generateRandomNum();
             // printf("Numero gerado:%d letra -> %c ",randomNumber, letters[randomNumber]);
             result[i] = letters[randomNumber];
             if (i == size - 1)
@@ -45,8 +46,6 @@ void generatePassWord(int size, int difficulty, char letters[], char result[], i
 int main(int argc, char *argv[])
 {
     char letters[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    // char capitalLetters [26] = toupper(letters);
-    char alph[] = {'.', ',', ':', '?', '=', '-', '(', ')', '/', '%', '@', '!'};
     char numbers[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     uint8_t *hash;
     uint8_t *result;
@@ -54,36 +53,29 @@ int main(int argc, char *argv[])
     char *senha = argv[1];
     int tamanhoSenha = strlen(senha);
     result = md5String(senha);
-    srand(atoi(argv[3]));
     int count = 0;
-    clock_t t;
-    t = clock();
-
+    double starttime, stoptime;
+    starttime = omp_get_wtime(); 
     char generatedPassWord[tamanhoSenha + 1];
-    generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord, atoi(argv[3]));
-    hash = md5String(generatedPassWord);
-
-    #pragma omp parallel num_threads(12)
-    while (!compare(hash, result))
+    int flag = 1;
+    #pragma omp parallel num_threads(atoi(argv[3])) shared(count,flag,result) private(hash,generatedPassWord,stoptime)
     {
-        // printf("Tamanho da senha: %d\n",tamanhoSenha);
-        generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord, atoi(argv[3]));
-        // printf("Gerador de senha(Senha antes do hash): %s \n",generatedPassWord);
-        hash = md5String(generatedPassWord);
-        // printf("Gerador de senha(Depois do hash): ");
-        // print_bytes(hash,16);
-        // printf("Hash sendo procurado: ");
-        // print_bytes(result,16);
-        // printf("\n");
-        count++;
+        srand(omp_get_thread_num());
+        while(flag)
+        {
+            generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
+            hash = md5String(generatedPassWord);
+            count++;
+            
+            if(compare(result, hash)){
+                stoptime = omp_get_wtime();
+                printf("Tempo de execucao: %3.2f segundos\n", stoptime-starttime);
+                printf("Senha encontrada: %s\n", generatedPassWord);
+                printf("Quantidade de iteracoes: %d\n", count);
+                printf("Thread: %d\n\n", omp_get_thread_num());
+                flag = 0;
+            }
+        }
     }
-
-    t = clock() - t;
-    double time_taken = ((double)t) / CLOCKS_PER_SEC; // in seconds
-
-    printf("Tempo de execucao: %f  \n", time_taken);
-    printf("Senha encontrada: %s\n", generatedPassWord);
-    printf("Quantidade de iteracoes: %d", count);
-
     free(result);
 }

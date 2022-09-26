@@ -1,9 +1,2 @@
-CC = gcc
-
-CFLAGS = -Wall -Wextra -O3
-
-md5: md5.c main.c
-	@$(CC) $(CFLAGS) -o md5 md5.c main.c
-
-clean:
-	@$(RM) md5
+unhash : md5.c printer.c unhash.c
+	gcc -o teste md5.c printer.c unhash.c -fopenmp
