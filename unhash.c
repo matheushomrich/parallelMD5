@@ -18,7 +18,7 @@ int generateRandomNum()
     return rand() % 26;
 }
 
-void generatePassWord(int size, int difficulty, char letters[], char result[])
+void generatePassWord(int size, int difficulty, char letters[], char numberLetters[],char result[])
 {
     if (difficulty == EASY)
     {
@@ -35,7 +35,13 @@ void generatePassWord(int size, int difficulty, char letters[], char result[])
     }
     else if (difficulty == MEDIUM)
     {
-        // printf("MEDIUM");
+        int randomNumber = generateRandomNum();
+            // printf("Numero gerado:%d letra -> %c ",randomNumber, numbersLetters[randomNumber]);
+            result[i] = numberLetters[randomNumber];
+            if (i == size - 1)
+            {
+                result[i + 1] = 0;
+            }
     }
     else if (difficulty == HARD)
     {
@@ -46,7 +52,8 @@ void generatePassWord(int size, int difficulty, char letters[], char result[])
 int main(int argc, char *argv[])
 {
     char letters[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    char numbers[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    char numbersletters[36] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4, '5', '6', '7', '8', '9'};
+    char numbersLettersSybomls[1] = ['a']
     uint8_t *hash;
     uint8_t *result;
     int dificuldade = atoi(argv[2]);
@@ -63,7 +70,7 @@ int main(int argc, char *argv[])
         srand(omp_get_thread_num());
         while(flag)
         {
-            generatePassWord(tamanhoSenha, dificuldade, letters, generatedPassWord);
+            generatePassWord(tamanhoSenha, dificuldade, letters, numbersletters, generatedPassWord);
             hash = md5String(generatedPassWord);
             count++;
             
